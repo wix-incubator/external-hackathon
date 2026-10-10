@@ -20,8 +20,7 @@
     "@wix/members": "^1.0.527",
     "@wix/sdk": "^1.21.5",
     "astro": "^7.3.5",
-    "motion": "^12.43.0",
-    "typescript": "^7.0.2"
+    "motion": "^12.43.0"
   },
   "devDependencies": {
     "@astrojs/react": "^7.0.0",
@@ -30,6 +29,7 @@
     "@wix/astro-wix-hosting-adapter": "^3.0.1",
     "@wix/cli": "^1.1.258",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "typescript": "^7.0.2"
   }
 }
