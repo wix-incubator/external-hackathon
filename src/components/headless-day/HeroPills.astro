@@ -1,0 +1,24 @@
+---
+// Decorative business-solution pills scattered around a hero, gently floating.
+// Positioned by %, with a per-pill accent color.
+export interface Pill {
+  label: string;
+  color: string;
+  top: number;
+  left: number;
+}
+interface Props {
+  pills: Pill[];
+}
+const { pills } = Astro.props;
+---
+
+<div class="hcf-hd-hero-pills" aria-hidden="true">
+  {
+    pills.map((p) => (
+      <span class="hcf-hd-pill" style={`top:${p.top}%;left:${p.left}%;--pill:${p.color}`}>
+        {p.label}
+      </span>
+    ))
+  }
+</div>

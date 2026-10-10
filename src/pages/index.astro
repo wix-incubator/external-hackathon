@@ -1,0 +1,171 @@
+---
+import HeadlessDayLayout from '@/layouts/HeadlessDayLayout.astro';
+import HeroPills from '@/components/headless-day/HeroPills.astro';
+import { SetupSteps } from '@/components/headless-day/SetupSteps';
+import { CopySkill } from '@/components/headless-day/CopySkill';
+import { SubmitProject } from '@/components/headless-day/SubmitProject';
+import { requireMember, toMemberProfile } from '@/lib/server/requireMember';
+import { SKILL_URL, SUPPORT_CHANNEL, SLACK_CHANNEL_URL } from '@/lib/constants';
+
+// Members only — anonymous visitors are sent to /login and back.
+const member = await requireMember(Astro);
+if (member instanceof Response) return member;
+
+// Rows shown in the "you're ready" terminal mock.
+const TERM_ROWS: [string, string][] = [
+  ['System', 'macOS'],
+  ['Node.js', 'v22.16.0'],
+  ['npm registry', 'https://registry.npmjs.org'],
+  ['Wix CLI', '1.1.222'],
+  ['Wix account', 'you@wix.com'],
+];
+
+const HERO_PILLS = [
+  { label: 'Music', color: '#7b2ff7', top: 12, left: 27 },
+  { label: 'Events', color: '#e5484d', top: 16, left: 55 },
+  { label: 'Blog', color: '#e07b12', top: 15, left: 82 },
+  { label: 'Ecommerce', color: '#1026ed', top: 27, left: 8 },
+  { label: 'Education', color: '#1c1d21', top: 32, left: 90 },
+  { label: 'Photo', color: '#12a5b5', top: 48, left: 15 },
+  { label: 'Travel', color: '#e5399f', top: 49, left: 87 },
+];
+
+const STEPS = [
+  {
+    n: '1',
+    title: 'Set Up',
+    body: 'Make your environment ready for creating your headless project. Follow the instructions below to complete the setup.',
+  },
+  {
+    n: '2',
+    title: 'Create',
+    body: 'Choose how you want to create your project — start from scratch or with a design. Make sure to connect your frontend to Wix business solutions.',
+  },
+  {
+    n: '3',
+    title: 'Submit',
+    body: 'Once you finish, submit your project. It will be added to the gallery and you may win a prize.',
+  },
+];
+---
+
+<HeadlessDayLayout
+  title="Headless Day | Wix Headless"
+  description="Headless Day — build a real business website with AI and Wix Headless, then submit it to the competition."
+>
+  <main class="hcf-hd">
+    <!-- Hero -->
+    <section class="hcf-hd-hero">
+      <div class="hcf-hero-dots" aria-hidden="true"></div>
+      <HeroPills pills={HERO_PILLS} />
+      <div class="hcf-hd-hero-inner">
+        <h1 class="hcf-hd-hero-title">Create Without Boundaries.<br />Go Headless.</h1>
+        <p class="hcf-hd-hero-sub">
+          Enter the competition — build a real Wix Headless site and compete for a MacBook Neo.
+        </p>
+        <div class="hcf-hd-hero-cta">
+          <a class="hcf-hd-btn-dark" href="#scratch">Start from scratch</a>
+          <a class="hcf-hd-btn-dark" href="#design">Start with a design</a>
+        </div>
+        <a class="hcf-hd-hero-submitlink" href="#submit">Submit Your Project</a>
+      </div>
+      <a class="hcf-hd-scrollcue" href="#start" aria-label="Scroll down">
+        <svg viewBox="0 0 44 36" fill="none" aria-hidden="true">
+          <path
+            d="M22 4 V30 M9 20 L22 31 L35 20"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </a>
+    </section>
+
+    <!-- Steps band -->
+    <section class="hcf-hd-steps" id="start">
+      <div class="hcf-hd-steps-grid">
+        {
+          STEPS.map((s) => (
+            <div class="hcf-hd-step">
+              <h2 class="hcf-hd-step-title">
+                <span class="hcf-hd-step-n">{s.n}.</span> {s.title}
+              </h2>
+              <p class="hcf-hd-step-body">{s.body}</p>
+            </div>
+          ))
+        }
+      </div>
+      <p class="hcf-hd-support">
+        Need support? go to{' '}
+        <a href={SLACK_CHANNEL_URL} target="_blank" rel="noreferrer">#{SUPPORT_CHANNEL}</a>
+      </p>
+    </section>
+
+    <!-- Set up: accordions left, gradient panel with the terminal mock right -->
+    <section class="hcf-hd-setup" id="setup">
+      <div class="hcf-hd-setup-left">
+        <h2 class="hcf-hd-h2">Set Up Your Environment</h2>
+        <SetupSteps client:load />
+      </div>
+      <div class="hcf-hd-setup-right">
+        <div class="hcf-hd-term">
+          <div class="hcf-hd-term-bar" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="hcf-hd-term-body">
+            <p class="hcf-hd-term-ready">You&rsquo;re ready to build with Wix Headless.</p>
+            <dl class="hcf-hd-term-rows">
+              {
+                TERM_ROWS.map(([k, v]) => (
+                  <div class="hcf-hd-term-row">
+                    <dt>{k}</dt>
+                    <dd>{v}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Create: scratch + design -->
+    <section class="hcf-hd-section hcf-hd-create">
+      <div class="hcf-hd-create-cols">
+        <div id="scratch" class="hcf-hd-create-col">
+          <h2 class="hcf-hd-h2">Start From Scratch</h2>
+          <p class="hcf-hd-lead">
+            Describe what you&rsquo;re building in your AI coding tool and Wix adds the business layer —
+            payments, bookings, CMS and more.
+          </p>
+          <p class="hcf-hd-example">
+            &ldquo;Create a ceramic store with a modern design and a clean palette using {SKILL_URL}&rdquo;
+          </p>
+        </div>
+        <div id="design" class="hcf-hd-create-col">
+          <h2 class="hcf-hd-h2">Start from design</h2>
+          <p class="hcf-hd-lead">
+            Export your design files (Figma, stitch, whatever) and attach them to a coding agent — ask
+            it to build a site from your design using this skill.
+          </p>
+          <p class="hcf-hd-example">
+            &ldquo;Use these files to build my site and business using {SKILL_URL}&rdquo;
+          </p>
+        </div>
+      </div>
+      <CopySkill client:visible />
+    </section>
+
+    <!-- Submit -->
+    <section class="hcf-hd-section" id="submit">
+      <SubmitProject client:visible user={toMemberProfile(member)} />
+    </section>
+
+    <footer class="hcf-hd-footer">
+      Need support? go to{' '}
+      <a href={SLACK_CHANNEL_URL} target="_blank" rel="noreferrer">#{SUPPORT_CHANNEL}</a>
+    </footer>
+  </main>
+</HeadlessDayLayout>

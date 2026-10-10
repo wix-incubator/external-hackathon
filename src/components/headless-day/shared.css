@@ -1,0 +1,325 @@
+/* ============ Headless Day — 3-step guide ============
+ * Standalone guide page (/headless-day) reusing the marketing theme tokens from
+ * base.css and the prompt-card visuals from hero.css. Layout only for now; the
+ * bodies of each step are placeholders filled in later.
+ *
+ * Fully fluid (see AGENTS.md → Styling): type via the --fs-* clamps, spacing via
+ * --space-*, rhythm via --section-py / --content-max / --content-gutter.
+ */
+.hcf-hday {
+  font-family: var(--hcf-font-text);
+  color: var(--hcf-ink);
+  background: #ffffff;
+}
+
+/* ---- Steps ---- */
+.hcf-hday-step-eyebrow {
+  margin: 0 0 var(--space-2);
+  font-family: var(--hcf-font-display);
+  font-weight: 500;
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--hcf-eyebrow);
+}
+.hcf-hday-step-title {
+  margin: 0;
+  font-family: var(--hcf-font-display);
+  font-weight: 500;
+  font-size: var(--fs-h2);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--hcf-ink);
+}
+
+/* ---- Submission form (Step 3) ---- */
+.hcf-hday-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 34rem;
+}
+.hcf-hday-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.hcf-hday-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--fs-ui);
+  font-weight: 500;
+  color: var(--hcf-ink);
+}
+.hcf-hday-optional {
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--hcf-body);
+}
+.hcf-hday-input {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--hcf-tab-border);
+  border-radius: 0.625rem;
+  background: #ffffff;
+  font-family: var(--hcf-font-text);
+  font-size: var(--fs-body);
+  color: var(--hcf-ink);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.hcf-hday-input::placeholder {
+  color: var(--hcf-body);
+  opacity: 0.6;
+}
+.hcf-hday-input:hover {
+  border-color: var(--hcf-accent-blue);
+}
+.hcf-hday-input:focus {
+  outline: none;
+  border-color: var(--hcf-accent-blue);
+  box-shadow: 0 0 0 3px rgba(16, 38, 237, 0.12);
+}
+/* Submit — outlined, matching the Copy Prompt button (the Generate gradient is
+   reserved for Generate alone). */
+.hcf-hday-submit {
+  align-self: flex-start;
+  margin-top: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--btn-h);
+  padding: 0 var(--btn-px);
+  border: 1px solid var(--hcf-tab-border);
+  border-radius: 100px;
+  background: #ffffff;
+  color: var(--hcf-ink);
+  font-family: var(--hcf-font-text);
+  font-size: var(--btn-fs);
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+.hcf-hday-submit:hover {
+  border-color: var(--hcf-accent-blue);
+}
+.hcf-hday-submit:focus-visible {
+  outline: 2px solid var(--hcf-blue);
+  outline-offset: 0.1875rem;
+}
+
+/* ---- Setup step (Step 1) ---- */
+
+/* Numbered instruction list. */
+.hcf-hday-list {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: var(--hcf-desc);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+}
+.hcf-hday-list > li {
+  padding-left: 0.375rem;
+}
+.hcf-hday-list > li + li {
+  margin-top: var(--space-4);
+}
+.hcf-hday-list strong {
+  font-weight: 700;
+  color: var(--hcf-ink);
+}
+
+/* Inline monospace token for commands / paths. */
+.hcf-hday-inline {
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  background: var(--hcf-code-bg);
+  border: 1px solid var(--hcf-divider);
+  font-family: var(--hcf-font-mono);
+  font-size: 0.9em;
+  color: var(--hcf-ink);
+  word-break: break-word;
+}
+
+/* Setup prompt: gradient-edged card, roomy mono text, black "Copy Prompt" pill
+   pinned bottom-right. */
+.hcf-hday-promptfield {
+  position: relative;
+  margin: var(--space-4) 0 0;
+  padding: var(--space-5) var(--space-5) 4.75rem;
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(120deg, #e6ff9f, #a6fff8 50%, #1026ed) border-box;
+  box-shadow: 0 10px 34px 6px rgba(28, 29, 33, 0.09);
+}
+.hcf-hday-promptinput {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  resize: none;
+  overflow: hidden;
+  font-family: var(--hcf-font-mono);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--hcf-ink);
+  cursor: text;
+}
+.hcf-hday-promptinput:focus,
+.hcf-hday-promptinput:focus-visible {
+  outline: none;
+}
+.hcf-hday-copy {
+  position: absolute;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  min-height: 2.75rem;
+  padding: 0 var(--space-4);
+  border: none;
+  border-radius: 0.625rem;
+  background: var(--hcf-ink);
+  color: #ffffff;
+  font-family: var(--hcf-font-text);
+  font-size: var(--fs-ui);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.hcf-hday-copy:hover {
+  background: #2b2c31;
+}
+.hcf-hday-copy:focus-visible {
+  outline: 2px solid var(--hcf-blue);
+  outline-offset: 2px;
+}
+.hcf-hday-copy[data-copied='true'] {
+  background: var(--hcf-accent-blue);
+}
+
+.hcf-hday-note {
+  margin: var(--space-3) 0 0;
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--hcf-ink);
+}
+
+/* ---- FAQ ---- */
+.hcf-hday-faq {
+  border-top: 1px solid var(--hcf-divider);
+  background: var(--hcf-code-bg);
+  padding-block: var(--section-py);
+}
+.hcf-hday-faq-inner {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--content-gutter);
+}
+.hcf-hday-faq-intro {
+  margin: var(--space-3) 0 0;
+  max-width: 60ch;
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--hcf-desc);
+}
+.hcf-hday-faq-intro a {
+  color: var(--hcf-accent-blue);
+  text-decoration: underline;
+  text-underline-offset: from-font;
+}
+.hcf-hday-faq-list {
+  margin-top: var(--space-6);
+  border-top: 1px solid var(--hcf-tab-border);
+}
+.hcf-hday-faq-item {
+  border-bottom: 1px solid var(--hcf-tab-border);
+}
+.hcf-hday-faq-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--hcf-font-display);
+  font-weight: 500;
+  font-size: clamp(1.125rem, 1.4vw, 1.375rem);
+  line-height: 1.3;
+  color: var(--hcf-ink);
+}
+.hcf-hday-faq-row:focus-visible {
+  outline: 2px solid var(--hcf-blue);
+  outline-offset: 0.25rem;
+}
+.hcf-hday-faq-chevron {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.hcf-hday-faq-body-wrap {
+  overflow: hidden;
+}
+.hcf-hday-faq-body {
+  padding: 0 0 var(--space-5);
+  max-width: 62ch;
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--hcf-desc);
+}
+.hcf-hday-faq-body a {
+  color: var(--hcf-accent-blue);
+  text-decoration: underline;
+  text-underline-offset: from-font;
+}
+.hcf-hday-faq-body a:hover {
+  opacity: 0.75;
+}
+.hcf-hday-faq-p {
+  margin: var(--space-3) 0 0;
+}
+.hcf-hday-faq-sublist {
+  margin: var(--space-3) 0 0;
+  padding-left: 1.25rem;
+}
+.hcf-hday-faq-sublist > li + li {
+  margin-top: var(--space-2);
+}
+.hcf-hday-faq-sublist strong {
+  color: var(--hcf-ink);
+}
+/* Important note callout (git-on-Mac tip). */
+.hcf-hday-callout {
+  margin: var(--space-4) 0 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--hcf-accent-blue);
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: rgba(57, 16, 237, 0.05);
+  font-size: var(--fs-ui);
+  line-height: 1.5;
+  color: var(--hcf-desc);
+}
+.hcf-hday-callout strong {
+  color: var(--hcf-accent-blue);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hcf-hday-copy,
+.hcf-hday-input,
+.hcf-hday-submit {
+    transition: none;
+  }
+}

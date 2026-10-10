@@ -1,0 +1,38 @@
+---
+import { HEADLESS_DAY_ROUTES, LOGOUT_ACTION, type HeadlessDayPage } from '@/components/headless-day/routes';
+
+// Shared header for the Headless Day pages: nav (active link from the URL) and
+// Log out (a POST to the built-in @wix/astro logout route).
+const NAV: { page: HeadlessDayPage; label: string }[] = [
+  { page: 'home', label: 'Home' },
+  { page: 'information', label: 'Information' },
+  { page: 'gallery', label: 'Gallery' },
+  { page: 'reels', label: 'Reels' },
+  { page: 'mySubmission', label: 'My Submissions' },
+];
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+---
+
+<header class="hcf-hday-header">
+  <nav class="hcf-hday-nav" aria-label="Headless Day">
+    {
+      NAV.map((n) => {
+        const href = HEADLESS_DAY_ROUTES[n.page];
+        const active = href === path;
+        return (
+          <a
+            href={href}
+            class="hcf-hday-navlink"
+            data-active={active ? 'true' : undefined}
+            aria-current={active ? 'page' : undefined}
+          >
+            {n.label}
+          </a>
+        );
+      })
+    }
+  </nav>
+  <form class="hcf-hday-logout" method="post" action={LOGOUT_ACTION}>
+    <button type="submit" class="hcf-hday-logout-btn">Log out</button>
+  </form>
+</header>

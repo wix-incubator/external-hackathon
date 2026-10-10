@@ -1,0 +1,33 @@
+---
+import HeadlessDayLayout from '@/layouts/HeadlessDayLayout.astro';
+import { MySubmissions } from '@/components/headless-day/MySubmissions';
+import { requireMember, toMemberProfile } from '@/lib/server/requireMember';
+import { fetchMySubmissions } from '@/lib/headlessDayApi';
+import { withThumbs } from '@/lib/server/siteThumbs';
+import type { GallerySite } from '@/lib/headlessDayData';
+
+// Members only — anonymous visitors are sent to /login and back.
+const member = await requireMember(Astro);
+if (member instanceof Response) return member;
+
+// The member's submissions (with thumbnails resolved to their CDN URLs), so the
+// editors render with the page. On failure the island loads them itself (null).
+let initial: GallerySite[] | null = null;
+try {
+  initial = await withThumbs(await fetchMySubmissions(member.email));
+} catch {
+  initial = null;
+}
+---
+
+<HeadlessDayLayout title="My Submissions | Headless Day" noindex>
+  <main class="hcf-hday-page hcf-hday-mysub-page">
+    <header class="hcf-hday-page-head">
+      <p class="hcf-hday-step-eyebrow">My Submissions</p>
+      <h1 class="hcf-hday-page-title">Manage your submissions</h1>
+      <p class="hcf-hday-page-sub">Add or update your sites any time before the deadline.</p>
+    </header>
+
+    <MySubmissions client:load user={toMemberProfile(member)} initial={initial} />
+  </main>
+</HeadlessDayLayout>

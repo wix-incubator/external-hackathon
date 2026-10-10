@@ -1,0 +1,46 @@
+---
+// Shell for the Headless Day pages: fonts, the marketing theme tokens, the
+// route-scoped Headless Day stylesheet and (unless `bare`) the shared header.
+import '@/styles/base.css';
+import '@/components/headless-day/headless-day.css';
+import Header from '@/components/headless-day/Header.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  noindex?: boolean;
+  /** Full-bleed pages (login, reels) render without the theme wrapper + header. */
+  bare?: boolean;
+}
+const { title, description, noindex, bare } = Astro.props;
+
+// Wix fonts proxy (parastorage) for Wix Madefor + JetBrains Mono.
+const FONTS_HREF =
+  'https://static.parastorage.com/tag-bundler/api/v1/fonts-cache/googleAPI/css?family=Wix+Madefor+Display:400,500%7CWix+Madefor+Text:400,500,700%7CJetBrains+Mono:400&display=swap';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="preconnect" href="https://static.parastorage.com" />
+    <link rel="stylesheet" href={FONTS_HREF} />
+  </head>
+  <body>
+    {
+      bare ? (
+        <slot />
+      ) : (
+        <div class="hcf-page hcf-hday">
+          <Header />
+          <slot />
+        </div>
+      )
+    }
+  </body>
+</html>

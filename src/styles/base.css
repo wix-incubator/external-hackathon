@@ -1,0 +1,130 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+html,
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* ===== Wix Headless marketing theme ===== */
+:root {
+  /* Fonts */
+  --hcf-font-display:
+    'Wix Madefor Display', 'Wix Madefor Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --hcf-font-text: 'Wix Madefor Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --hcf-font-mono:
+    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+
+  /* Colors (from Figma) */
+  --hcf-ink: #000000;
+  --hcf-body: #7c7b7b;
+  --hcf-eyebrow: #8c8b8a;
+  --hcf-desc: #2f2f30;
+  --hcf-blue: #1026ed;
+  --hcf-accent-blue: #3910ed;
+  --hcf-lime: #e6ff9f;
+  --hcf-cyan: #a6fff8;
+  --hcf-code-bg: #f8f8f6;
+  --hcf-tab-border: #c8d0d8;
+  --hcf-divider: #f4f4f4;
+  --hcf-dark: #000000;
+  --hcf-card-dark: #1c1d21;
+  --hcf-card-dark-text: #f4f4f4;
+
+  /* ---- Responsive frame-scaling standard ----
+   * Every marketing section is a pixel-exact reproduction of a fixed-width
+   * Figma frame, scaled to fill the viewport. `--u` is the on-screen size of
+   * 1 Figma px; author every dimension as calc(<figma-px> * var(--u)).
+   *
+   * `--frame` is the active Figma canvas width. It defaults to the desktop
+   * frame (1920) and is re-declared per breakpoint by each section that has a
+   * dedicated tablet/phone layout (see the frame widths below). A section that
+   * has NOT been given a smaller-frame layout keeps --frame:1920 and simply
+   * scales down — it never breaks.
+   *
+   *   Phone   ≤599px  → frame 360   (--u = 100vw/360)
+   *   Tablet  600–1024 → frame 768  (--u = 100vw/768)
+   *   Desktop ≥1025px → frame 1920  (--u = min(100vw,1920)/1920, frozen ≥1920)
+   *
+   * The min() caps desktop at design size on ultrawide screens; it never
+   * affects the tablet/phone frames (viewport < 1920 there). Frame-based
+   * sections center above 1920 via a wrapper of width calc(1920 * var(--u)). */
+  --hcf-frame-desktop: 1920;
+  --hcf-frame-tablet: 768;
+  --hcf-frame-phone: 360;
+
+  /* ---- Fluid type scale ----
+   * Accessible + faithful to master: bounds are in rem (so they scale with the
+   * user's font-size / browser zoom — unlike master's px frame-scaling), and the
+   * vw slope is tuned to master's DESKTOP curve `designPx * min(100vw,1920)/1920`
+   * so the rendered size matches master at 1280 & 1920. The rem min = master's
+   * phone size (and a readable floor). Between breakpoints it scales smoothly.
+   * Sections add a targeted tablet/phone override only where master's per-frame
+   * design differs enough to matter (e.g. its larger tablet headlines). */
+  /* hero title: master 87.61px@1920 (→58.4 @1280), 32px phone. slope 4.563vw */
+  --fs-hero: clamp(2rem, 4.563vw, 5.476rem);
+  /* section + ai-tool titles: master 56px@1920 (→37.3 @1280), 32px phone */
+  --fs-h2: clamp(2rem, 2.917vw, 3rem);
+  /* CTA banner title: master 100px@1920 (→66.7 @1280), 44px phone */
+  --fs-cta: clamp(2.75rem, 5.208vw, 6.25rem);
+  /* body / lead / accordion body: master 18px@1920; floored at 1rem for a11y
+   * (master's 12px @1280 is too small to reproduce accessibly) */
+  --fs-body: clamp(1rem, 0.938vw, 1.125rem);
+  /* eyebrow / code text: master 17px@1920 (→11.3 @1280, matched), floor 0.8125rem */
+  --fs-eyebrow: clamp(0.8125rem, 0.885vw, 1.0625rem);
+  /* buttons, tags, accordion labels: master 16px@1920; floored 0.875rem for a11y
+   * (master's ~10.7px @1280 is below an accessible tap/read size) */
+  --fs-ui: clamp(0.875rem, 0.833vw, 1rem);
+
+  /* ---- Spacing scale (rem, 16px base) ---- */
+  --space-1: 0.25rem; /* 4px  */
+  --space-2: 0.5rem; /* 8px  */
+  --space-3: 1rem; /* 16px */
+  --space-4: 1.5rem; /* 24px */
+  --space-5: 2rem; /* 32px */
+  --space-6: 3rem; /* 48px */
+  --space-7: 4rem; /* 64px */
+  --space-8: 6rem; /* 96px */
+  --space-9: 8rem; /* 128px */
+
+  /* ---- Fluid layout system (full-fluid modern; not frame-scaled) ----
+   * Sections size from content + these fluid rhythm tokens, not from --u.
+   * --u survives only for decorative pixel-art that must track its artboard. */
+  --content-max: 71.25rem; /* 1140px — main text/column width */
+  --content-gutter: clamp(1.25rem, 5vw, 4rem); /* 20→64px side padding */
+  --section-py: clamp(4rem, 9vw, 10rem); /* 72→160px vertical section rhythm */
+  --section-py-tight: clamp(3rem, 6vw, 6.5rem); /* 48→104px for denser sections */
+
+  /* ---- Unified action-button size (Copy Prompt / Start Now, every section) ---- */
+  --btn-h: 2.35rem; /* 37.6px — one height across all buttons */
+  --btn-fs: 1.125rem; /* 18px desktop (16px ≤1024, below) */
+  --btn-px: 1.05rem; /* 16.8px horizontal padding */
+  --btn-gap: 0.5rem; /* icon ↔ label */
+}
+
+/* Buttons read slightly smaller on tablet/phone. */
+@media (max-width: 1024px) {
+  :root {
+    --btn-fs: 1rem; /* 16px */
+    --btn-px: 1.5rem; /* 24px */
+  }
+}
+
+.hcf-page {
+  font-family: var(--hcf-font-text);
+  color: var(--hcf-ink);
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  /* `--frame` is the active design-frame width (default desktop); each section
+   * overrides it per breakpoint. See the --u declaration below. */
+  --frame: var(--hcf-frame-desktop);
+  --u: calc(min(100vw, 1920px) / var(--frame));
+}

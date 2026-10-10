@@ -1,0 +1,253 @@
+---
+import HeadlessDayLayout from '@/layouts/HeadlessDayLayout.astro';
+import { Faqs } from '@/components/headless-day/Faqs';
+import { requireMember } from '@/lib/server/requireMember';
+import { SLACK_CHANNEL_URL } from '@/lib/constants';
+
+// Members only — anonymous visitors are sent to /login and back.
+const member = await requireMember(Astro);
+if (member instanceof Response) return member;
+
+interface AgendaRow {
+  time?: string;
+  what: string[];
+  where: string;
+  zoomUrl?: string;
+}
+const AGENDA: AgendaRow[] = [
+  {
+    time: '10:00 – 10:45',
+    what: ['Welcome and Intro to Headless — @itays', 'Product Intro — @Dor Chaouat & @tuvit'],
+    where: 'Wix Meet Auditorium',
+    zoomUrl: 'https://wix.zoom.us/s/86233782856',
+  },
+  {
+    time: '11:00 – 11:30',
+    what: ['Breakout Session (Beginners) — Prompt Engineering basics with @yoavc (optional)'],
+    where: 'Wix Learn — Stunning',
+    zoomUrl: 'https://wix.zoom.us/j/8805494236?omn=86228295648&jst=3',
+  },
+  {
+    what: ['Breakout Session (Advanced) — Intro to the Wix CLI with @Dor Chaouat (optional)'],
+    where: 'Wix Learn — Hashmonaim',
+    zoomUrl: 'https://wix.zoom.us/j/82578761086?jst=2',
+  },
+  {
+    what: ['Breakout Session — Intro to Jay with @Yoav Abrahami (optional)'],
+    where: 'Wix Learn — Drag’n’Drop',
+    zoomUrl: 'https://wix.zoom.us/j/82617762541',
+  },
+];
+
+const WINNER_STEPS: { icon: string; label: string; body: string }[] = [
+  {
+    icon: '🤖',
+    label: 'Review bot',
+    body: 'Our review agent will review your site to check page speed, broken links and more — so make sure to test your site before you submit.',
+  },
+  {
+    icon: '👍',
+    label: 'Like meter',
+    body: 'Every site that passes the review bot will be available in the gallery to accept votes. The crowd will pick its favorites, and those will move on to the next round.',
+  },
+  {
+    icon: '🎓',
+    label: 'Studio experts',
+    body: 'Will review the top 50, one by one. The top 10 will move to the final round.',
+  },
+  {
+    icon: '🏆',
+    label: 'The Finals',
+    body: 'The top three sites will be selected by our esteemed Headless committee, and 3 will be selected as winners.',
+  },
+];
+
+// Example projects for inspiration.
+const INSPO_LINKS: { label: string; href: string }[] = [
+  {
+    label: 'Virtual gallery with checkout',
+    href: 'https://above-and-49ae17b6-yoavc4.wix-site-host.com/',
+  },
+  { label: 'Murder Mystery board', href: 'https://www.bullet-in-board.online/' },
+  {
+    label: 'Live camera preview of Stores products',
+    href: 'https://tju6i8-cameramirr-4207394a-kerenvi.wix-site-host.com/',
+  },
+  { label: 'Mondial 26 Hub', href: 'https://www.mondial26.info/' },
+  {
+    label: 'Build a Spud Product Bundle',
+    href: 'https://build-a-sp-bd7a14ae-yoavc4.wix-site-host.com/',
+  },
+  { label: 'Composable With', href: 'https://exploded-h-5d6748e7-adamdi1.wix-site-host.com/' },
+];
+const SUCCESS_STORIES_URL = 'https://www.wix-headless.dev/blog';
+const DESIGN_SUPPORT_URL = 'https://wix.slack.com/archives/C0BFWP59FRT';
+---
+
+<HeadlessDayLayout title="Information | Headless Day">
+  <main class="hcf-hd-info">
+    <!-- Agenda -->
+    <section class="hcf-hd-section hcf-hd-agenda">
+      <div class="hcf-hd-agenda-inner">
+        <h1 class="hcf-hd-h2">Agenda</h1>
+        <div class="hcf-hd-agenda-scroll">
+          <table class="hcf-hd-agenda-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>What</th>
+                <th>Where</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                AGENDA.map((row) => (
+                  <tr>
+                    <td class="hcf-hd-agenda-time">{row.time ?? ''}</td>
+                    <td>
+                      {row.what.map((line) => (
+                        <span class="hcf-hd-agenda-what-line">{line}</span>
+                      ))}
+                    </td>
+                    <td class="hcf-hd-agenda-where">
+                      {row.where}
+                      {row.zoomUrl && (
+                        <>
+                          {' / '}
+                          <a href={row.zoomUrl} target="_blank" rel="noreferrer">
+                            Zoom
+                          </a>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Help desk banner -->
+    <section class="hcf-hd-helpdesk">
+      <p>
+        <strong>Want help while you build?</strong> Throughout Headless Day we&rsquo;ll have an in-person
+        help desk with reps from our technical and design teams to guide you as you build. The help desk
+        will be available in Wix Learn — Free &amp; Easy and also on Slack{' '}
+        <a href={SLACK_CHANNEL_URL} target="_blank" rel="noreferrer">#headless-day-26</a>.
+      </p>
+    </section>
+
+    <!-- Participate / inspo / help -->
+    <section class="hcf-hd-section hcf-hd-qa">
+      <div class="hcf-hd-qa-inner">
+        <div class="hcf-hd-qa-row">
+          <h2 class="hcf-hd-qa-q">How do I participate?</h2>
+          <div class="hcf-hd-qa-a">
+            <p>
+              To apply for the big prize, you&rsquo;ll need to submit your project, including a public
+              GitHub repo that contains all the project files. If you&rsquo;ve never set up a GitHub or
+              git account, refer to the <a href="#faq-git">set up guide</a>.
+            </p>
+          </div>
+        </div>
+
+        <div class="hcf-hd-qa-row">
+          <h2 class="hcf-hd-qa-q">Can I get some inspo?</h2>
+          <div class="hcf-hd-qa-a">
+            <p>
+              Check out{' '}
+              <a href={SUCCESS_STORIES_URL} target="_blank" rel="noreferrer">success stories</a>{' '}
+              on the Wix Blog, and explore some example projects our own employees have built:
+            </p>
+            <ul class="hcf-hd-qa-list">
+              {
+                INSPO_LINKS.map((link) => (
+                  <li>
+                    <a href={link.href} target="_blank" rel="noreferrer">
+                      {link.label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+
+        <div class="hcf-hd-qa-row">
+          <h2 class="hcf-hd-qa-q">Need some help?</h2>
+          <div class="hcf-hd-qa-a">
+            <p>
+              If you encounter a bug or are stuck for any reason, let us know in the{' '}
+              <a href={SLACK_CHANNEL_URL}>Slack channel</a> using the relevant button. If you&rsquo;re
+              looking for dedicated design support, visit{' '}
+              <a href={DESIGN_SUPPORT_URL}>#headless-day-design-support</a>.
+            </p>
+            <p>
+              We also have dedicated Headless team members available in person at the Wix Campus who
+              can help you find who or what you need.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Winning the contest: banner -->
+    <section class="hcf-hd-winbanner">
+      <h2 class="hcf-hd-winbanner-title">Winning The Contest</h2>
+      <p class="hcf-hd-winbanner-sub">
+        All you need to know to be the winner of Headless Day. Read the instructions below to make
+        sure your site is a winner!
+      </p>
+    </section>
+
+    <!-- Winning the contest: details -->
+    <section class="hcf-hd-section hcf-hd-winning">
+      <div class="hcf-hd-winning-inner">
+        <div class="hcf-hd-winning-block">
+          <h3 class="hcf-hd-winning-h">
+            What makes a winning site (AKA how do I compete for the MacBook Neo)?
+          </h3>
+          <p class="hcf-hd-winning-p">
+            We want to see how you utilize Wix Headless and our Business Solutions to power the frontend
+            that you generate while creating the most creative websites
+          </p>
+        </div>
+
+        <div class="hcf-hd-winning-block">
+          <h3 class="hcf-hd-winning-h">How is the winner determined?</h3>
+          <p class="hcf-hd-winning-p">
+            We have a multi-step process in place to determine who goes to the quarters, semis, and the
+            final:
+          </p>
+          <ol class="hcf-hd-winner-steps">
+            {
+              WINNER_STEPS.map((s) => (
+                <li>
+                  <span class="hcf-hd-winner-icon" aria-hidden="true">
+                    {s.icon}
+                  </span>
+                  <span>
+                    <strong>{s.label}</strong> — {s.body}
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <div class="hcf-hd-winning-block">
+          <h3 class="hcf-hd-winning-h">When to submit? &amp; when are winners announced?</h3>
+          <p class="hcf-hd-winning-p">
+            You may submit 1 website by 7pm on July 9, though the system will remain open until July 18.
+            The lucky winners will be announced on July 20th.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ (interactive accordion) -->
+    <Faqs client:visible />
+  </main>
+</HeadlessDayLayout>

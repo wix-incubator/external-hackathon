@@ -1,0 +1,222 @@
+/* ---- Information: Agenda ---- */
+.hcf-hd-agenda-inner {
+  width: 100%;
+}
+.hcf-hd-agenda-inner .hcf-hd-h2 {
+  margin: 0 0 var(--space-6);
+  text-align: left;
+}
+.hcf-hd-agenda-scroll {
+  overflow-x: auto;
+}
+.hcf-hd-agenda-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.hcf-hd-agenda-table th {
+  padding: 0 var(--space-5) var(--space-4) 0;
+  font-family: var(--hcf-font-text);
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hcf-eyebrow);
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+.hcf-hd-agenda-table td {
+  padding: var(--space-4) var(--space-5) var(--space-4) 0;
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  color: var(--hcf-ink);
+  vertical-align: top;
+}
+.hcf-hd-agenda-table th:first-child,
+.hcf-hd-agenda-table td:first-child {
+  width: 9rem;
+}
+.hcf-hd-agenda-table th:last-child,
+.hcf-hd-agenda-table td:last-child {
+  width: 20rem;
+}
+.hcf-hd-agenda-time {
+  white-space: nowrap;
+}
+.hcf-hd-agenda-what-line {
+  display: block;
+}
+.hcf-hd-agenda-what-line + .hcf-hd-agenda-what-line {
+  margin-top: 0.35rem;
+}
+.hcf-hd-agenda-where {
+  color: var(--hcf-body);
+}
+
+/* ---- Information: help-desk banner ---- */
+.hcf-hd-helpdesk {
+  padding: var(--space-7) var(--content-gutter);
+  background: #f3e7e2;
+}
+.hcf-hd-helpdesk p {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--hcf-ink);
+}
+.hcf-hd-helpdesk strong {
+  font-weight: 600;
+}
+
+/* ---- Information: Winning the contest banner ---- */
+.hcf-hd-winbanner {
+  padding: var(--section-py) var(--content-gutter);
+  background: var(--hcf-code-bg);
+  text-align: center;
+}
+.hcf-hd-winbanner-title {
+  margin: 0;
+  font-family: var(--hcf-font-display);
+  font-weight: 500;
+  font-size: clamp(2.75rem, 7.5vw, 6.25rem);
+  line-height: 1.2;
+  letter-spacing: -0.023em;
+  padding-bottom: 0.08em; /* room for descenders under background-clip: text */
+  background: radial-gradient(
+    75.14% 320.17% at 65.37% -51.07%,
+    #ff5500 0%,
+    #d7aa96 31.19%,
+    #455466 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hcf-hd-winbanner-sub {
+  margin: var(--space-4) auto 0;
+  max-width: 46ch;
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--hcf-body);
+}
+
+/* ---- Information: Winning the contest details ---- */
+.hcf-hd-winning-inner {
+  width: 100%;
+  max-width: 48rem;
+  margin-inline: auto;
+  text-align: left;
+}
+.hcf-hd-winning-block + .hcf-hd-winning-block {
+  margin-top: var(--space-7);
+}
+.hcf-hd-winning-h {
+  margin: 0 0 var(--space-3);
+  font-family: var(--hcf-font-display);
+  font-weight: 500;
+  font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+  line-height: 1.25;
+  color: var(--hcf-ink);
+}
+.hcf-hd-winning-p {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--hcf-body);
+}
+.hcf-hd-winner-steps {
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.hcf-hd-winner-steps li {
+  display: flex;
+  gap: 0.75rem;
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--hcf-body);
+}
+.hcf-hd-winner-icon {
+  flex: none;
+}
+.hcf-hd-winner-steps strong {
+  color: var(--hcf-ink);
+}
+
+/* ---- Information: participate / inspo / help Q&A ---- */
+.hcf-hd-qa-inner {
+  width: 100%;
+}
+.hcf-hd-qa-row {
+  display: grid;
+  grid-template-columns: minmax(0, 20rem) 1fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  padding: var(--space-6) 0;
+  border-top: 1px solid var(--hcf-divider);
+}
+.hcf-hd-qa-row:last-child {
+  border-bottom: 1px solid var(--hcf-divider);
+}
+.hcf-hd-qa-q {
+  margin: 0;
+  text-align: right;
+  font-family: var(--hcf-font-display);
+  font-weight: 600;
+  font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+  line-height: 1.25;
+  color: var(--hcf-ink);
+}
+.hcf-hd-qa-a {
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--hcf-ink);
+}
+.hcf-hd-qa-a p {
+  margin: 0;
+}
+.hcf-hd-qa-a p + p {
+  margin-top: var(--space-3);
+}
+.hcf-hd-qa-a a {
+  color: var(--hcf-accent-blue);
+  text-decoration: underline;
+  text-underline-offset: from-font;
+}
+.hcf-hd-qa-list {
+  margin: var(--space-3) 0 0;
+  padding-left: 1.25rem;
+}
+.hcf-hd-qa-list li {
+  margin-top: 0.35rem;
+}
+@media (max-width: 700px) {
+  .hcf-hd-qa-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  .hcf-hd-qa-q {
+    text-align: left;
+  }
+}
+
+/* ---- Information page: all text + links black ---- */
+.hcf-hd-info a {
+  color: var(--hcf-ink);
+}
+.hcf-hd-info .hcf-hday-step-eyebrow,
+.hcf-hd-info .hcf-hday-faq-intro,
+.hcf-hd-info .hcf-hday-faq-body,
+.hcf-hd-info .hcf-hday-callout,
+.hcf-hd-info .hcf-hday-callout strong,
+.hcf-hd-info .hcf-hd-qa-a,
+.hcf-hd-info .hcf-hd-winning-p,
+.hcf-hd-info .hcf-hd-winbanner-sub,
+.hcf-hd-info .hcf-hd-agenda-where,
+.hcf-hd-info .hcf-hd-agenda-table th,
+.hcf-hd-info .hcf-hd-winner-steps li {
+  color: var(--hcf-ink);
+}

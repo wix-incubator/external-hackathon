@@ -1,0 +1,123 @@
+/* ---- Login (/login) — the home hero's backdrop with a centered sign-in card ---- */
+.hcf-login {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--space-7) var(--content-gutter);
+}
+.hcf-login .hcf-hero-dots {
+  background-image:
+    radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 60%),
+    radial-gradient(circle, rgba(190, 190, 190, 0.34) 1px, transparent 1.7px);
+  background-size:
+    100% 100%,
+    22px 22px;
+  background-repeat: no-repeat, repeat;
+}
+
+.hcf-login-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 30rem;
+  padding: clamp(2rem, 5vw, 3rem);
+  border: 1px solid var(--hcf-tab-border);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.04),
+    0 24px 60px -24px rgba(57, 16, 237, 0.25);
+  text-align: center;
+}
+.hcf-login-eyebrow {
+  margin: 0;
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hcf-eyebrow);
+}
+.hcf-login-title {
+  margin: var(--space-3) 0 0;
+  font-family: var(--hcf-font-display);
+  font-weight: 500;
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--hcf-ink);
+  text-wrap: balance;
+}
+.hcf-login-sub {
+  margin: var(--space-3) auto 0;
+  max-width: 34ch;
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  color: var(--hcf-body);
+}
+
+.hcf-login-actions {
+  margin-top: var(--space-5);
+  display: grid;
+  gap: var(--space-3);
+}
+.hcf-login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 3.25rem;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--hcf-tab-border);
+  border-radius: 0.625rem;
+  background: #ffffff;
+  color: var(--hcf-ink);
+  font-family: var(--hcf-font-text);
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.1s ease;
+}
+.hcf-login-btn:hover {
+  border-color: var(--hcf-ink);
+  box-shadow: 0 4px 14px -6px rgba(0, 0, 0, 0.25);
+}
+.hcf-login-btn:active {
+  transform: translateY(1px);
+}
+.hcf-login-btn:focus-visible {
+  outline: 2px solid var(--hcf-blue);
+  outline-offset: 2px;
+}
+.hcf-login-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+}
+.hcf-login-fine {
+  margin: var(--space-4) 0 0;
+  font-size: 0.8125rem;
+  color: var(--hcf-eyebrow);
+}
+
+/* Phones: the pills would crowd the card — drop them. */
+@media (max-width: 700px) {
+  .hcf-login .hcf-hd-hero-pills {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hcf-login .hcf-hd-pill {
+    animation: none;
+  }
+  .hcf-login-btn {
+    transition: none;
+  }
+}

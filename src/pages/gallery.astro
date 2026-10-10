@@ -1,0 +1,43 @@
+---
+import HeadlessDayLayout from '@/layouts/HeadlessDayLayout.astro';
+import { GalleryBrowser, PAGE_SIZE, type GalleryInitial } from '@/components/headless-day/GalleryBrowser';
+import { RollingCount } from '@/components/headless-day/RollingCount';
+import { requireMember } from '@/lib/server/requireMember';
+import { withThumbs } from '@/lib/server/siteThumbs';
+import { fetchAllSubmissions } from '@/lib/headlessDayApi';
+import { shuffle } from '@/lib/shuffle';
+
+// Members only — anonymous visitors are sent to /login and back.
+const member = await requireMember(Astro);
+if (member instanceof Response) return member;
+
+// The default view (Random, no filters) renders with the page: shuffle every
+// submission, keep the first page, and resolve those cards' thumbnails to their
+// CDN URLs. The browser builds the rest of the pool after hydrating. On failure
+// the island loads the first page itself (null) and the count shows "00".
+let initial: GalleryInitial | null = null;
+try {
+  const all = shuffle(await fetchAllSubmissions());
+  initial = { sites: await withThumbs(all.slice(0, PAGE_SIZE)), total: all.length };
+} catch {
+  initial = null;
+}
+---
+
+<HeadlessDayLayout title="Gallery | Headless Day">
+  <main class="hcf-hday-page hcf-hday-gallery-page">
+    <header class="hcf-hday-page-head">
+      <p class="hcf-hday-step-eyebrow">Gallery</p>
+      <h1 class="hcf-hday-page-title hcf-hday-gallery-title">
+        <RollingCount client:load value={initial?.total ?? 0} />
+        <span>Sites built on Headless Day</span>
+      </h1>
+      <p class="hcf-hday-page-sub">
+        Browse everything submitted so far. Open a site in a new tab, or like as many as you want —
+        you can change your mind any time (you can&rsquo;t like your own).
+      </p>
+    </header>
+
+    <GalleryBrowser client:load initial={initial} />
+  </main>
+</HeadlessDayLayout>

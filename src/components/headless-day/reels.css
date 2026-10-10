@@ -1,0 +1,599 @@
+/* ============================================================================
+ * Headless Day — Showcase
+ * A full-viewport, TikTok-style one-site-at-a-time browser. A live <iframe> of
+ * each submitted site fills the screen; a persistent chrome layer floats the
+ * submitter/title/solutions plus like, open-in-new-tab and prev/next controls.
+ * Desktop uses a solid header bar with the site pushed down below it; tablet/
+ * phone keep the actions in a right-hand rail with the meta pinned to the
+ * bottom. The chrome stays visible at all times (no auto-hide).
+ * ========================================================================== */
+
+.hcf-reels {
+  --showcase-bar-h: 3.5rem;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: #0b0b0d;
+  font-family: var(--hcf-font-text);
+  color: #fff;
+}
+
+/* ---- Centered states (loading / error / empty) ---- */
+.hcf-reels-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  text-align: center;
+  padding: var(--content-gutter);
+}
+.hcf-reels-msg {
+  margin: 0;
+  font-size: var(--fs-body);
+  color: rgba(255, 255, 255, 0.85);
+}
+.hcf-reels-exit-link {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+  font-weight: 500;
+}
+.hcf-reels-exit-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* ---- Stage + iframe (pushed below the header bar on desktop) ---- */
+.hcf-reels-stage {
+  position: absolute;
+  inset: 0;
+  top: var(--showcase-bar-h);
+}
+.hcf-reels-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #fff;
+}
+
+/* ---- Spinner (full-page "Loading Reels…" state) ---- */
+.hcf-reels-spinner {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #fff;
+  animation: hcf-reels-spin 0.8s linear infinite;
+}
+@keyframes hcf-reels-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================================
+ * Poster — the thumbnail loader (and fallback surface).
+ * Sits above the iframe until it goes live; on 'live' it fades out
+ * (AnimatePresence in Reels.tsx) to reveal the site. While loading, the thumb is
+ * blurred behind a glossy sheen so the real site reads as "materialising"
+ * behind glass, with a gradient-bordered "Loading <name>…" pill on top.
+ * ========================================================================== */
+.hcf-reels-poster {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  padding: var(--content-gutter);
+  overflow: hidden;
+}
+.hcf-reels-poster-img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* While loading, blur + zoom the thumb (the site is "coming into focus"). */
+.hcf-reels-poster[data-mode='loading'] .hcf-reels-poster-img {
+  filter: blur(12px) saturate(1.15) brightness(0.85);
+  transform: scale(1.08);
+}
+
+/* Glossy sheen layer — the frosted-glass "loading behind" depth. */
+.hcf-reels-poster-glass {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 42%),
+    radial-gradient(130% 90% at 50% -10%, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.42) 72%);
+}
+/* Moving highlight sweep — loading only. The pseudo-element is overscanned
+ * beyond the poster (negative inset) and travels a short distance, so its own
+ * edges never enter the frame — no hard vertical seams on narrow/mobile widths.
+ * A soft, low-opacity band centred at 50% keeps the sweep smooth. */
+.hcf-reels-poster[data-mode='loading'] .hcf-reels-poster-glass::after {
+  content: '';
+  position: absolute;
+  inset: -25% -15%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 60%,
+    transparent 100%
+  );
+  transform: translateX(-55%);
+  animation: hcf-reels-sheen 3s ease-in-out infinite;
+}
+@keyframes hcf-reels-sheen {
+  to {
+    transform: translateX(55%);
+  }
+}
+
+/* Loader pill with an animated conic-gradient border. */
+.hcf-reels-loader {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  max-width: min(90%, 30rem);
+  padding: 0.7rem 1.2rem;
+  border-radius: 100px;
+  background: rgba(12, 12, 15, 0.55);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 44px rgba(0, 0, 0, 0.42);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+/* Animate the conic gradient's start angle (not the element) so the colours
+ * travel around a static border instead of the whole pill spinning. */
+@property --hcf-reels-border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+.hcf-reels-loader::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 3px;
+  background: conic-gradient(
+    from var(--hcf-reels-border-angle),
+    #ff4d6d,
+    #ffb86b,
+    #7c5cff,
+    #4dd0ff,
+    #ff4d6d
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: hcf-reels-border-travel 3.5s linear infinite;
+}
+@keyframes hcf-reels-border-travel {
+  to {
+    --hcf-reels-border-angle: 360deg;
+  }
+}
+.hcf-reels-loader-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Gradient ring spinner inside the pill. */
+.hcf-reels-loader-ring {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #ff4d6d, #ffb86b, #7c5cff, #ff4d6d);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 0);
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 0);
+  animation: hcf-reels-spin 0.9s linear infinite;
+}
+
+/* ---- Fallback note (site refused to frame) — sits on top of the poster ---- */
+.hcf-reels-fallback-note {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+  color: #fff;
+}
+.hcf-reels-fallback-note p {
+  margin: 0;
+  font-size: 1rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+.hcf-reels-fallback-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 100px;
+  background: #fff;
+  color: #0b0b0d;
+  font-weight: 600;
+  text-decoration: none;
+}
+.hcf-reels-fallback-open:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+.hcf-reels-fallback-open:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* ---- Chrome (persistent overlay) ---- */
+.hcf-reels-chrome {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hcf-reels-scrim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+.hcf-reels-scrim-bottom {
+  bottom: 0;
+  height: 11rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+  /* Only needed where the meta sits at the bottom (tablet/phone). */
+  display: none;
+}
+
+/* ---- Desktop header bar ---- */
+.hcf-reels-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--showcase-bar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 1.25rem;
+  background: rgba(11, 11, 13, 0.92);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+}
+.hcf-reels-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ---- Exit link ---- */
+.hcf-reels-exit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: none;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+.hcf-reels-exit:hover {
+  opacity: 1;
+}
+.hcf-reels-exit:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---- Meta (submitter / title / solutions) — inline row on desktop ---- */
+.hcf-reels-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  overflow: hidden;
+}
+.hcf-reels-owner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: none;
+}
+.hcf-reels-avatar {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+.hcf-reels-avatar-img {
+  object-fit: cover;
+}
+.hcf-reels-ownername {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.hcf-reels-title {
+  margin: 0;
+  font-family: var(--hcf-font-display);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hcf-reels-solutions {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.375rem;
+  flex: none;
+}
+.hcf-reels-solchip {
+  padding: 0.15rem 0.6rem;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ---- Actions (count / like / open / prev-next) ---- */
+.hcf-reels-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: none;
+  pointer-events: auto;
+}
+
+/* Shared pill/round control look. */
+.hcf-reels-like,
+.hcf-reels-open,
+.hcf-reels-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease;
+}
+.hcf-reels-like:hover,
+.hcf-reels-open:hover,
+.hcf-reels-arrow:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.hcf-reels-like:active,
+.hcf-reels-open:active,
+.hcf-reels-arrow:active {
+  transform: scale(0.94);
+}
+.hcf-reels-like:focus-visible,
+.hcf-reels-open:focus-visible,
+.hcf-reels-arrow:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.hcf-reels-like,
+.hcf-reels-open {
+  height: 2.5rem;
+  padding: 0 0.95rem;
+  border-radius: 100px;
+  text-decoration: none;
+}
+.hcf-reels-heart {
+  font-size: 1.05rem;
+  line-height: 1;
+  color: #fff;
+  transition: color 0.15s ease;
+}
+.hcf-reels-like[data-voted='true'] {
+  border-color: rgba(255, 77, 109, 0.6);
+  background: rgba(255, 77, 109, 0.22);
+}
+.hcf-reels-like[data-voted='true'] .hcf-reels-heart {
+  color: #ff4d6d;
+}
+.hcf-reels-like:disabled {
+  cursor: default;
+}
+.hcf-reels-like[data-own='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.hcf-reels-likecount {
+  font-variant-numeric: tabular-nums;
+}
+
+.hcf-reels-nav {
+  display: flex;
+  gap: 0.4rem;
+}
+.hcf-reels-arrow {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  padding: 0;
+}
+
+/* ============================================================================
+ * Tablet + phone: TikTok-style right rail, meta pinned to the bottom.
+ * The bar wrappers collapse (display: contents) so exit / meta / actions each
+ * position themselves against the full-viewport chrome.
+ * ========================================================================== */
+@media (max-width: 1024px) {
+  .hcf-reels {
+    --showcase-bar-h: 0rem;
+  }
+  .hcf-reels-bar,
+  .hcf-reels-left {
+    display: contents;
+  }
+  .hcf-reels-scrim-bottom {
+    display: block;
+  }
+
+  .hcf-reels-exit {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 100px;
+    background: rgba(0, 0, 0, 0.45);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+  }
+  .hcf-reels-exit:hover {
+    background: rgba(0, 0, 0, 0.65);
+  }
+
+  .hcf-reels-meta {
+    position: absolute;
+    top: auto;
+    bottom: 1.25rem;
+    left: 1rem;
+    right: 5.5rem; /* clear the rail */
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    overflow: visible;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+    pointer-events: auto;
+  }
+  .hcf-reels-title {
+    font-size: clamp(1.25rem, 4.5vw, 1.75rem);
+    line-height: 1.15;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  .hcf-reels-solutions {
+    flex-wrap: wrap;
+  }
+  .hcf-reels-solchip {
+    background: rgba(255, 255, 255, 0.22);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    text-shadow: none;
+  }
+
+  /* Rail sits in the lower third (~2/3 down), close to the bottom. */
+  .hcf-reels-actions {
+    position: absolute;
+    top: 66%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  /* Round buttons stacked in the rail; labels collapse to icons. */
+  .hcf-reels-like,
+  .hcf-reels-open {
+    flex-direction: column;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border-radius: 50%;
+    gap: 0.1rem;
+    font-size: 0.6875rem;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+  .hcf-reels-like:hover,
+  .hcf-reels-open:hover {
+    background: rgba(0, 0, 0, 0.72);
+  }
+  .hcf-reels-open-label {
+    display: none;
+  }
+  .hcf-reels-likecount {
+    font-size: 0.625rem;
+    line-height: 1;
+  }
+  .hcf-reels-heart {
+    font-size: 1.15rem;
+  }
+  .hcf-reels-arrow {
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+  .hcf-reels-arrow:hover {
+    background: rgba(0, 0, 0, 0.72);
+  }
+  .hcf-reels-nav {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hcf-reels-spinner,
+  .hcf-reels-loader::before,
+  .hcf-reels-loader-ring {
+    animation: none;
+  }
+  .hcf-reels-poster[data-mode='loading'] .hcf-reels-poster-glass::after {
+    display: none;
+  }
+  .hcf-reels-like:active,
+  .hcf-reels-open:active,
+  .hcf-reels-arrow:active {
+    transform: none;
+  }
+}

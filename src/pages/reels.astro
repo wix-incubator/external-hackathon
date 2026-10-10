@@ -1,0 +1,14 @@
+---
+import HeadlessDayLayout from '@/layouts/HeadlessDayLayout.astro';
+import { Reels } from '@/components/headless-day/Reels';
+import { requireMember } from '@/lib/server/requireMember';
+
+// Members only — anonymous visitors are sent to /login and back.
+const member = await requireMember(Astro);
+if (member instanceof Response) return member;
+---
+
+<!-- Full-screen viewer — no site header. -->
+<HeadlessDayLayout title="Reels | Headless Day" bare>
+  <Reels client:load />
+</HeadlessDayLayout>

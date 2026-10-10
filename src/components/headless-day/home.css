@@ -1,0 +1,664 @@
+/* ============================================================================
+ * Unified Headless Day home (/headless-day) — hero + steps + setup + create +
+ * brief + submit + footer, on the dotted-grid marketing theme.
+ * ========================================================================== */
+.hcf-hd {
+  font-family: var(--hcf-font-text);
+  color: var(--hcf-ink);
+  background: #ffffff;
+}
+
+/* Shared dark pill button */
+.hcf-hd-btn-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0 var(--space-5);
+  border: none;
+  border-radius: 0.625rem;
+  background: var(--hcf-ink);
+  color: #ffffff;
+  font-family: var(--hcf-font-text);
+  font-size: var(--btn-fs);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease;
+}
+.hcf-hd-btn-dark:hover {
+  background: #2b2c31;
+}
+.hcf-hd-btn-dark:active {
+  transform: translateY(1px);
+}
+.hcf-hd-btn-dark:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* Shared headings */
+.hcf-hd-h2 {
+  margin: 0;
+  font-family: var(--hcf-font-display);
+  font-weight: 500;
+  font-size: var(--fs-h2);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--hcf-ink);
+}
+.hcf-hd-center {
+  text-align: center;
+}
+.hcf-hd-lead {
+  margin: var(--space-4) 0 0;
+  max-width: 46ch;
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--hcf-ink);
+}
+.hcf-hd-support a,
+.hcf-hd-footer a {
+  color: var(--hcf-accent-blue);
+  text-decoration: underline;
+}
+
+/* Sections: dotted grid, centered content capped to content width */
+.hcf-hd-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--section-py) var(--content-gutter);
+  background-image: radial-gradient(circle, rgba(190, 190, 190, 0.32) 1px, transparent 1.7px);
+  background-size: 22px 22px;
+}
+.hcf-hd-section > * {
+  width: 100%;
+  max-width: var(--content-max);
+}
+
+/* ---- Hero ---- */
+.hcf-hd-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: clamp(10rem, 24vh, 15rem) var(--content-gutter) 4rem;
+  text-align: center;
+}
+/* Dotted backdrop (ported from the funnel's landing hero.css); the home hero
+   and the login page tune its fade below. */
+.hcf-hero-dots {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+/* Hero-scoped dots: even coverage with only a whisper of fade under the nav
+   (the shared .hcf-hero-dots fades far too hard at the top for this layout). */
+.hcf-hd-hero .hcf-hero-dots {
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 12%),
+    radial-gradient(circle, rgba(190, 190, 190, 0.34) 1px, transparent 1.7px);
+  background-size:
+    100% 100%,
+    22px 22px;
+  background-repeat: no-repeat, repeat;
+}
+.hcf-hd-hero-pills {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.hcf-hd-pill {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 7.5rem;
+  padding: 0.5rem 1.75rem;
+  border: 1px solid var(--pill);
+  border-radius: 100px;
+  background: #ffffff;
+  color: var(--pill);
+  font-family: var(--hcf-font-text);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  animation: hcf-hd-float 7s ease-in-out infinite alternate;
+}
+.hcf-hd-pill:nth-child(2n) {
+  animation-duration: 9s;
+}
+.hcf-hd-pill:nth-child(3n) {
+  animation-duration: 8s;
+  animation-delay: -2s;
+}
+@keyframes hcf-hd-float {
+  from {
+    transform: translate(-50%, -50%);
+  }
+  to {
+    transform: translate(-50%, calc(-50% - 14px));
+  }
+}
+.hcf-hd-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 60rem;
+}
+.hcf-hd-hero-title {
+  margin: 0;
+  font-family: var(--hcf-font-display);
+  font-weight: 500;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--hcf-ink);
+  text-wrap: balance;
+}
+.hcf-hd-hero-sub {
+  margin: var(--space-5) auto 0;
+  max-width: 56ch;
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  color: var(--hcf-body);
+}
+.hcf-hd-hero-cta {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}
+.hcf-hd-hero-submitlink {
+  display: inline-block;
+  margin-top: var(--space-4);
+  color: var(--hcf-ink);
+  font-family: var(--hcf-font-text);
+  font-size: var(--fs-ui);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.hcf-hd-hero-submitlink:hover {
+  color: var(--hcf-accent-blue);
+}
+.hcf-hd-scrollcue {
+  margin-top: var(--space-7);
+  z-index: 2;
+  width: 2.75rem;
+  height: 2.25rem;
+  color: var(--hcf-ink);
+  animation: hcf-hd-bob 1.8s ease-in-out infinite;
+}
+.hcf-hd-scrollcue svg {
+  width: 100%;
+  height: 100%;
+}
+@keyframes hcf-hd-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* ---- Steps band ---- */
+.hcf-hd-steps {
+  background: var(--hcf-code-bg);
+  padding: var(--section-py-tight) var(--content-gutter);
+  scroll-margin-top: 4rem;
+}
+.hcf-hd-steps-grid {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+.hcf-hd-step-title {
+  margin: 0;
+  font-family: var(--hcf-font-display);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--hcf-ink);
+}
+.hcf-hd-step-n {
+  color: var(--hcf-ink);
+}
+.hcf-hd-step-body {
+  margin: var(--space-3) 0 0;
+  font-size: var(--fs-ui);
+  line-height: 1.55;
+  color: var(--hcf-ink);
+}
+.hcf-hd-support {
+  margin: var(--space-6) 0 0;
+  text-align: center;
+  font-size: var(--fs-ui);
+  font-weight: 700;
+  color: var(--hcf-ink);
+}
+.hcf-hd-support a {
+  color: var(--hcf-ink);
+}
+
+/* ---- Set up section ---- */
+.hcf-hd-section .hcf-hd-h2 {
+  align-self: flex-start;
+  margin-bottom: var(--space-6);
+}
+.hcf-hd-section .hcf-hd-h2.hcf-hd-center {
+  align-self: center;
+}
+
+/* ---- Create ---- */
+.hcf-hd-create-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  margin-bottom: var(--space-7);
+}
+.hcf-hd-create-col .hcf-hd-h2 {
+  align-self: auto;
+  margin-bottom: 0;
+}
+/* Example prompt quote: lime left bar, muted italic */
+.hcf-hd-example {
+  margin: var(--space-4) 0 0;
+  padding-left: var(--space-4);
+  border-left: 3px solid var(--hcf-lime);
+  max-width: 46ch;
+  font-size: var(--fs-body);
+  font-style: italic;
+  line-height: 1.55;
+  color: #555454;
+}
+
+/* Gradient-edged skill box (shared look: lime→cyan→blue border) */
+.hcf-hd-skill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(120deg, #e6ff9f, #a6fff8 55%, #1026ed) border-box;
+  box-shadow: 0 12px 30px rgba(124, 123, 123, 0.12);
+}
+.hcf-hd-skill-url {
+  font-family: var(--hcf-font-mono);
+  font-size: 0.9375rem;
+  color: var(--hcf-ink);
+  word-break: break-all;
+}
+.hcf-hd-skill-copy {
+  flex: none;
+  min-height: 2.5rem;
+  padding: 0 var(--space-4);
+  border: none;
+  border-radius: 0.5rem;
+  background: var(--hcf-ink);
+  color: #ffffff;
+  font-family: var(--hcf-font-text);
+  font-size: var(--fs-ui);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.hcf-hd-skill-copy[data-copied='true'] {
+  background: var(--hcf-accent-blue);
+}
+
+/* ---- Solution tags (submit forms) ---- */
+.hcf-hd-solpicker {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.hcf-hd-tag {
+  padding: 0.3125rem 0.75rem;
+  border: 1px solid var(--hcf-tab-border);
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: var(--hcf-ink);
+  font-family: var(--hcf-font-text);
+  font-size: var(--fs-ui);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.hcf-hd-tag:hover {
+  border-color: var(--hcf-accent-blue);
+}
+.hcf-hd-tag[data-active='true'] {
+  background: var(--hcf-ink);
+  border-color: var(--hcf-ink);
+  color: #ffffff;
+}
+
+/* ---- Submit form ---- */
+.hcf-hd-form {
+  max-width: 34rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.hcf-hd-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.hcf-hd-label {
+  font-size: var(--fs-ui);
+  font-weight: 500;
+  color: var(--hcf-ink);
+}
+.hcf-hd-optional {
+  font-weight: 400;
+  color: var(--hcf-body);
+}
+.hcf-hd-input {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0 var(--space-4);
+  border: 2px solid transparent;
+  border-radius: 11px;
+  /* Border gradient: lime at the ends, light blue through the middle (Figma). */
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(90deg, #e6ff9f 0%, #e4e4e4 22%, #bcd3ff 50%, #e4e4e4 78%, #d6fe66 100%)
+      border-box;
+  box-shadow: 31px 14px 50.3px 0 rgba(0, 0, 0, 0.07);
+  backdrop-filter: blur(1.5px);
+  font-family: var(--hcf-font-text);
+  font-size: var(--fs-body);
+  color: var(--hcf-ink);
+}
+.hcf-hd-input::placeholder {
+  color: var(--hcf-body);
+  opacity: 0.6;
+}
+.hcf-hd-input:focus {
+  outline: 2px solid rgba(16, 38, 237, 0.35);
+  outline-offset: 1px;
+}
+.hcf-hd-solpicker {
+  justify-content: flex-start;
+}
+.hcf-hd-form-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+.hcf-hd-submitted {
+  max-width: 40rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.hcf-hd-submitted-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: var(--space-4);
+}
+.hcf-hd-submitted-title {
+  margin: 0;
+  font-family: var(--hcf-font-display);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  line-height: 1.1;
+  color: var(--hcf-ink);
+}
+.hcf-hd-submitted-sub {
+  margin: var(--space-2) 0 0;
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
+  line-height: 1.4;
+  color: var(--hcf-ink);
+}
+.hcf-hd-submitted .hcf-hd-btn-dark {
+  margin-top: var(--space-6);
+}
+.hcf-hd-submitted-actions {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+.hcf-hd-submitted-actions .hcf-hd-btn-dark {
+  margin-top: 0;
+}
+/* Underlined text button, styled like a link (e.g. "Submit another Project"). */
+.hcf-hd-textlink {
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--hcf-ink);
+  font-family: var(--hcf-font-text);
+  font-size: var(--fs-ui);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.hcf-hd-textlink:hover {
+  color: var(--hcf-accent-blue);
+}
+
+/* ---- Footer ---- */
+.hcf-hd-footer {
+  padding: var(--space-6) var(--content-gutter);
+  text-align: center;
+  background: var(--hcf-code-bg);
+  border-top: 1px solid var(--hcf-divider);
+  font-size: var(--fs-ui);
+  color: var(--hcf-ink);
+}
+.hcf-hd-footer a {
+  color: var(--hcf-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hcf-hd-pill,
+.hcf-hd-scrollcue {
+    animation: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .hcf-hd-steps-grid {
+    grid-template-columns: 1fr;
+  }
+  .hcf-hd-create-cols {
+    grid-template-columns: 1fr;
+  }
+  /* Decorative floating pills overlap the centered hero text on narrow screens —
+     keep them as faint ambient background (text renders above them). */
+  .hcf-hd-pill {
+    opacity: 0.32;
+    min-width: 0;
+    padding: 0.4rem 1rem;
+    font-size: 0.8125rem;
+  }
+  /* Don't reserve a full viewport + huge top pad on phones. */
+  .hcf-hd-hero {
+    min-height: auto;
+    padding-top: clamp(6rem, 14vh, 9rem);
+    padding-bottom: 3rem;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Stack the hero CTAs full-width instead of wrapping mid-row. */
+  .hcf-hd-hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .hcf-hd-hero-cta .hcf-hd-btn-dark {
+    width: 100%;
+  }
+}
+
+/* ---- Set up: split (content left · gradient panel + terminal right) ---- */
+.hcf-hd-setup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  /* Reserve enough height for the tallest accordion so switching options
+     doesn't shift the layout. */
+  min-height: 70rem;
+}
+.hcf-hd-setup-left {
+  padding: var(--section-py) var(--space-7) var(--section-py) var(--content-gutter);
+  background-image: radial-gradient(circle, rgba(190, 190, 190, 0.32) 1px, transparent 1.7px);
+  background-size: 22px 22px;
+}
+.hcf-hd-setup-left .hcf-hd-h2 {
+  margin: 0 0 var(--space-6);
+}
+.hcf-hd-setup-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.5rem, 3.5vw, 3rem);
+  background: linear-gradient(155deg, #dbf27a 0%, #eafcbb 45%, #f6ffe4 100%);
+}
+/* Terminal / mac-window mock */
+.hcf-hd-term {
+  width: 100%;
+  max-width: 32rem;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(60, 70, 20, 0.18);
+}
+.hcf-hd-term-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0.875rem;
+  background: #f2f2ef;
+  border-bottom: 1px solid var(--hcf-divider);
+}
+.hcf-hd-term-bar > span {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+}
+.hcf-hd-term-bar > span:nth-child(1) {
+  background: #ff5f57;
+}
+.hcf-hd-term-bar > span:nth-child(2) {
+  background: #febc2e;
+}
+.hcf-hd-term-bar > span:nth-child(3) {
+  background: #28c840;
+}
+.hcf-hd-term-body {
+  padding: var(--space-5) var(--space-5) var(--space-6);
+  font-family: var(--hcf-font-mono);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--hcf-ink);
+}
+.hcf-hd-term-ready {
+  margin: 0 0 var(--space-4);
+}
+.hcf-hd-term-rows {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 1.75rem;
+  row-gap: 0.15rem;
+}
+.hcf-hd-term-row {
+  display: contents;
+}
+.hcf-hd-term-rows dt {
+  color: var(--hcf-body);
+}
+.hcf-hd-term-rows dd {
+  margin: 0;
+  color: var(--hcf-ink);
+  word-break: break-all;
+}
+
+/* ---- Accordions ---- */
+.hcf-hd-accs {
+  display: flex;
+  flex-direction: column;
+  max-width: 56rem;
+}
+.hcf-hd-acc {
+  border-top: 1px solid var(--hcf-tab-border);
+}
+.hcf-hd-acc:last-child {
+  border-bottom: 1px solid var(--hcf-tab-border);
+}
+.hcf-hd-acc-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: var(--space-4) 0;
+  border: none;
+  background: none;
+  font-family: var(--hcf-font-text);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  color: var(--hcf-ink);
+  text-align: left;
+  cursor: pointer;
+}
+.hcf-hd-acc-chev {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  transform: rotate(-90deg);
+  transition: transform 0.2s ease;
+}
+.hcf-hd-acc[data-open='true'] .hcf-hd-acc-chev {
+  transform: rotate(0deg);
+}
+.hcf-hd-acc-body {
+  padding: 0 0 var(--space-5) 1.5rem;
+}
+
+@media (max-width: 860px) {
+  .hcf-hd-setup {
+    grid-template-columns: 1fr;
+    /* The 70rem min-height reserves space for the side-by-side desktop layout;
+       stacked on mobile it would leave ~1,100px of blank space. */
+    min-height: auto;
+  }
+  .hcf-hd-setup-right {
+    order: -1;
+  }
+}

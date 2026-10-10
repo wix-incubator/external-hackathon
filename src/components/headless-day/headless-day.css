@@ -1,0 +1,9 @@
+/* Headless Day styles — route-scoped barrel, loaded only by
+ * layouts/HeadlessDayLayout.astro (the Headless Day pages + /login). Keep this
+ * file to @import statements only, in cascade order. */
+@import './shared.css';
+@import './gallery-submission.css';
+@import './home.css';
+@import './information.css';
+@import './reels.css';
+@import './login.css';
