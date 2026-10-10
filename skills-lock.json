@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "skills": {
+    "replatform": {
+      "source": "./node_modules/@wix/agent-skills",
+      "sourceType": "local",
+      "computedHash": "c0931b1aa6afe336d5e9691bad8920ff962aaea482edcdcdcfdc14a9ffd53fe5"
+    },
+    "wix-app": {
+      "source": "./node_modules/@wix/agent-skills",
+      "sourceType": "local",
+      "computedHash": "e2e2177b9def3e01f8797d8cfb788b18ee1591f05ac7f86a9c76b356e9d32453"
+    },
+    "wix-base44-connector": {
+      "source": "./node_modules/@wix/agent-skills",
+      "sourceType": "local",
+      "computedHash": "2cc2301192a2191096a836eccfe2b83c7497f3794b3a608ecd5a144253912e40"
+    },
+    "wix-design-system": {
+      "source": "./node_modules/@wix/agent-skills",
+      "sourceType": "local",
+      "computedHash": "47da8b5791959362c730a630c9893473a7e7fa645bbe93b63b306df2ddccbbaf"
+    },
+    "wix-docs": {
+      "source": "./node_modules/@wix/agent-skills",
+      "sourceType": "local",
+      "computedHash": "707412d644d9c0828d30e03649d4a44addeef244b9c2fee65f1f8d9184f53b96"
+    },
+    "wix-headless": {
+      "source": "./node_modules/@wix/agent-skills",
+      "sourceType": "local",
+      "computedHash": "df4972ee16816640cb19650a7e5905c6ff1490d2e56aeddaecfce2e932e2b188"
+    },
+    "wix-headless-kit": {
+      "source": "./node_modules/@wix/agent-skills",
+      "sourceType": "local",
+      "computedHash": "b813e36e135c2eeda5189447ce48f32e1972467bf2f0a92b7c1d1fcf4b0b5d26"
+    },
+    "wix-headless-templates": {
+      "source": "./node_modules/@wix/agent-skills",
+      "sourceType": "local",
+      "computedHash": "063dfbe98bd98b01f85fcbb4d5032b3562fbe2fe98f7fed7fe4896e1b714c083"
+    },
+    "wix-manage": {
+      "source": "./node_modules/@wix/agent-skills",
+      "sourceType": "local",
+      "computedHash": "99b25c6674cc55f9359ca753736954b569e98d633cc2caac1dc4dd7ae841110d"
+    },
+    "wix-vibe-headless": {
+      "source": "./node_modules/@wix/agent-skills",
+      "sourceType": "local",
+      "computedHash": "e78b2d0815f1510712a41d7cd86ae7bedc17ddc48487c1f5b6216e8a0f0408e3"
+    }
+  }
+}
