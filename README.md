@@ -1,3 +1,6 @@
+# Site
+https://hackathon-dorch3-0906.wix-site-host.com/
+
 ## Getting started
 
 1. **Node.js** — install Node 22.12 or newer (`node -v` to check).
